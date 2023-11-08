@@ -4,11 +4,21 @@ import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { auth } from "@/lib/firebase";
 import { useSignInWithGoogle, useAuthState } from "react-firebase-hooks/auth";
+import toast from "react-hot-toast";
 
 const GoogleAuth = () => {
   const router = useRouter();
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
   const [userAuth] = useAuthState(auth);
+
+  if (userAuth) {
+    console.log("loggedin");
+  } else {
+    //  if (currentUser?.data?.member?.id === userAuth?.uid) {
+    //    router.push("/app");
+    //  }
+    console.log("Not logged in");
+  }
 
   const handleAuth = async () => {
     try {
@@ -22,6 +32,13 @@ const GoogleAuth = () => {
       };
 
       console.log(userData);
+      toast.success("signed in successfully");
+
+      new Promise((resolve) =>
+        setTimeout(() => {
+          resolve(router.push("/"));
+        }, 5000)
+      );
 
       // addMember(userData, {
       //   onSuccess: () => {
@@ -33,12 +50,14 @@ const GoogleAuth = () => {
       // });
     } catch (error) {
       console.log(error);
+      toast.error("error: " + error);
     }
   };
 
   return (
     <div>
       <Button
+        type="button"
         onClick={handleAuth}
         variant={"secondary"}
         className="w-full flex items-center gap-x-3"
