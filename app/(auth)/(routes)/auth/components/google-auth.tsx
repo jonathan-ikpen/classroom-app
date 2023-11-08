@@ -33,12 +33,7 @@ const GoogleAuth = () => {
 
       console.log(userData);
       toast.success("signed in successfully");
-
-      new Promise((resolve) =>
-        setTimeout(() => {
-          resolve(router.push("/auth/new"));
-        }, 5000)
-      );
+      router.push("/auth/new");
 
       // addMember(userData, {
       //   onSuccess: () => {
