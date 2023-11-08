@@ -39,7 +39,6 @@ const GoogleAuth = () => {
   return (
     <div>
       <Button
-        type="submit"
         onClick={handleAuth}
         variant={"secondary"}
         className="w-full flex items-center gap-x-3"
