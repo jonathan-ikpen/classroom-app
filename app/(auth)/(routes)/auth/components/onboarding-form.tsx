@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
@@ -30,14 +31,20 @@ import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 
 const formSchema = z.object({
-  fname: z.string(),
-  lname: z.string(),
+  fname: z.string().min(1, { message: "Invalid first name" }),
+  lname: z.string().min(1, { message: "Invalid last name" }),
   status: z.enum(["LECTURER", "STUDENT"]),
-  matno: z.string(),
+  matno: z.string().min(1, { message: "Invalid mat number" }),
+  class: z.string().min(1, { message: "Invalid class name" }),
 });
 
 const OnboardingForm = () => {
-  const [authState, user, loading] = useAuthState(auth);
+  const router = useRouter();
+  const [authState, loading] = useAuthState(auth);
+
+  // if (!authState) {
+  //   router.push("/auth");
+  // }
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,6 +54,7 @@ const OnboardingForm = () => {
       lname: "",
       status: "STUDENT",
       matno: "",
+      class: "",
     },
   });
 
@@ -82,6 +90,7 @@ const OnboardingForm = () => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="lname"
@@ -95,6 +104,7 @@ const OnboardingForm = () => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="status"
@@ -116,20 +126,40 @@ const OnboardingForm = () => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="matno"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Matric No</FormLabel>
-              <FormControl className="">
-                <Input placeholder="M.20 / CSIT / 14533" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full bg-prim">
+
+        {form.watch("status") === "STUDENT" && (
+          <FormField
+            control={form.control}
+            name="matno"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Matric No</FormLabel>
+                <FormControl className="">
+                  <Input placeholder="M.20 / CSIT / 14533" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {form.watch("status") === "LECTURER" && (
+          <FormField
+            control={form.control}
+            name="class"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Class name</FormLabel>
+                <FormControl className="">
+                  <Input placeholder="COM 101" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        <Button disabled={loading} type="submit" className="w-full bg-prim">
           Submit
         </Button>
       </form>

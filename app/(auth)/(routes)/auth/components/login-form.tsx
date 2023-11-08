@@ -97,7 +97,7 @@ const LoginForm = () => {
           )}
         />
         {/* Form Button  */}
-        <Button type="submit" className="w-full bg-prim">
+        <Button disabled={loading} type="submit" className="w-full bg-prim">
           Submit
         </Button>
         <div className="relative">

@@ -57,6 +57,7 @@ const GoogleAuth = () => {
         variant={"secondary"}
         className="w-full flex items-center gap-x-3"
         size={"lg"}
+        disabled={loading}
       >
         <FcGoogle />
         Google
