@@ -66,6 +66,14 @@ const OnboardingForm = () => {
       //   logic here
 
       toast.success("account created");
+
+      // Routing after success
+      if (values.status === "STUDENT") {
+        router.push("/student");
+      }
+      if (values.status === "LECTURER") {
+        router.push("/lecturer");
+      }
     } catch (error) {
       console.log(error);
       toast.error("error: " + error);
