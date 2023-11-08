@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 
 import {
   useCreateUserWithEmailAndPassword,
@@ -37,6 +38,7 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const router = useRouter();
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
@@ -57,6 +59,7 @@ const LoginForm = () => {
       await createUserWithEmailAndPassword(values.email, values.password);
 
       toast.success("account created");
+      router.push("/auth/new");
     } catch (error) {
       console.log(error);
       toast.error("error: " + error);

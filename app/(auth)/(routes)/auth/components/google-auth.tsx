@@ -36,7 +36,7 @@ const GoogleAuth = () => {
 
       new Promise((resolve) =>
         setTimeout(() => {
-          resolve(router.push("/"));
+          resolve(router.push("/auth/new"));
         }, 5000)
       );
 
