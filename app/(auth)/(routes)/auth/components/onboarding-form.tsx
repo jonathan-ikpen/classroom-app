@@ -82,8 +82,11 @@ const OnboardingForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
-        <p className="text-center text-xl font-bold">Tell us more about you</p>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full mt-24 space-y-8"
+      >
+        <p className=" text-center text-xl font-bold">Tell us more about you</p>
 
         <FormField
           control={form.control}
@@ -167,7 +170,7 @@ const OnboardingForm = () => {
           />
         )}
 
-        <Button disabled={loading} type="submit" className="w-full bg-prim">
+        <Button type="submit" className="w-full bg-prim">
           Submit
         </Button>
       </form>
