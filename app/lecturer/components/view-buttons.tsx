@@ -20,12 +20,11 @@ const data = [
     icon: "",
     link: "",
   },
-  
 ];
 
 const ViewButtons = () => {
   return (
-    <div className="px-7 grid gap-4 grid-cols-2 lg:grid-cols-3">
+    <div className="p-7 grid gap-4 grid-cols-2 lg:grid-cols-3">
       {data.map((dat) => (
         <Card className="">
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
