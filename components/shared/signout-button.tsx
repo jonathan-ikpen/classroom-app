@@ -16,7 +16,11 @@ const SignOutButton = () => {
       toast.error("error: " + error);
     }
   };
-  return <Button onClick={handleSignOut}>Log Out</Button>;
+  return (
+    <Button onClick={handleSignOut} className="bg-prim">
+      Log Out
+    </Button>
+  );
 };
 
 export default SignOutButton;

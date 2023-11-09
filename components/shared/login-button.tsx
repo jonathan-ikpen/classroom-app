@@ -5,7 +5,7 @@ import Link from "next/link";
 function LoginButton() {
   return (
     <Link href={"/auth"}>
-      <Button>Log In</Button>
+      <Button className="bg-prim">Log In</Button>
     </Link>
   );
 }
