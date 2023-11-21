@@ -26,6 +26,7 @@ interface CompProps {
     icon: ReactElement,
     name: string,
     description: string,
+    quiz: boolean,
 }
 
 type Data = {
@@ -36,9 +37,10 @@ type Data = {
     youtubeEmbed?: string,
     file?: File,
     resourceLink?: string,
+    filloutId?: string,
 }
 
-const DialogBox: React.FC<CompProps> = ({ children, icon, name, description  }) => {
+const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, quiz  }) => {
     const {
         register,
         handleSubmit,
@@ -52,6 +54,9 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description  }) 
             class: "",
         }
     })
+
+    const quizTitleStyle = 'border-0 focus-visible:border-none rounded-none bg-gray-50 col-span-4 p-8 w-full border-b border-prim shadow-none';
+    const notQuizTitleStyle = 'col-span-4 p-8 w-full border-none bg-gray-100 focus:border-none outline-0 focus:outline-0 active:border-none ring-0 ';
 
     const onSubmit: SubmitHandler<Data> = async (values) => console.log(values)
 
@@ -72,16 +77,25 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description  }) 
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
                         <DialogHeader className="flex-none">
                             <DialogTitle className={"flex gap-6 text-4xl"}>{icon} {name}</DialogTitle>
-                            <DialogDescription>
-                                {description}
+                            <DialogDescription dangerouslySetInnerHTML={{ __html: description}}>
+                                {/*{description}*/}
                             </DialogDescription>
                         </DialogHeader>
                         <div className="flex-grow flex flex-col gap-4 py-4">
+                            {quiz && <div className="flex-none grid grid-cols-4 items-center">
+                                <Input
+                                    id="link"
+                                    type={"text"}
+                                    placeholder={"Your Fillout Quiz Test Id Here (Ex.: tyRqhhzjJQus)"}
+                                    className="col-span-4 p-10 w-full border-0 bg-gray-50 border-b border-prim rounded-none ring-0 "
+                                    {...register("filloutId", {required: true})}
+                                />
+                            </div>}
                             <div className="flex-none grid grid-cols-4 items-center gap-4">
 
                                 <Input
                                     id="title"
-                                    className="col-span-4 p-8 w-full border-none bg-gray-100 focus:border-none outline-0 focus:outline-0 active:border-none ring-0 "
+                                    className={quiz ? quizTitleStyle : notQuizTitleStyle}
                                     placeholder="Title"
                                     {...register("title", { required: true })}
                                 />
@@ -94,9 +108,10 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description  }) 
                                     {...register("instruction")}
                                 />
                             </div>
-                            <div className="flex-none grid grid-cols-4 items-center">
-                                <Attachments register={register} />
-                            </div>
+                            {!quiz && <div className="flex-none grid grid-cols-4 items-center">
+                                <Attachments register={register}/>
+                            </div>}
+
                         </div>
                         <DialogFooter className="flex-none">
                             <Button type="submit" disabled={!isValid} className="bg-[#333] hover:bg-[#222]">Save changes</Button>

@@ -21,6 +21,11 @@
   dependencies:
     eslint-visitor-keys "^3.3.0"
 
+"@fillout/react@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@fillout/react/-/react-1.0.0.tgz#d64a3d3a260a20ea86a00002870bd55339f981cc"
+  integrity sha512-JWNeWty1swrRb/WyEsHybzCRnSE3buHR7QGG3XYV4nwQE/BaOI5V5rjW2LNzM+T6V6XLhfVVgu7Wo7GVOgRBCA==
+
 "@firebase/analytics-compat@0.2.6":
   version "0.2.6"
   resolved "https://registry.yarnpkg.com/@firebase/analytics-compat/-/analytics-compat-0.2.6.tgz#50063978c42f13eb800e037e96ac4b17236841f4"

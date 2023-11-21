@@ -17,19 +17,22 @@ const data = [
     name: "Assignment",
     icon: <MdAssignmentAdd />,
     component: "",
-    description: "Add a new assignment"
+    description: "Add a new assignment",
+    quiz: false,
   },
   {
     name: "Test quiz",
     icon: <SiTestcafe />,
     component: "",
-    description: "Add a new Test Quiz"
+    description: `Add a new Test Quiz. <br> Go to <a href="https://fillout.com" class="text-green-600 underline">fillout.com</a> create a new Test Quiz and Copy Quiz Id`,
+    quiz: true,
   },
   {
     name: "Lecture Material",
     icon: <GoVideo />,
     component: "",
-    description: "Add a new Lecture Material"
+    description: "Add a new Lecture Material",
+    quiz: false,
   },
 ];
 
@@ -46,7 +49,7 @@ export function PopoverComp() {
           <div className="grid gap-2">
             {data.map((dat) => (
               <div className="flex gap-1 p-4">
-                  <DialogBox icon={dat.icon} name={dat.name} description={dat.description} />
+                  <DialogBox icon={dat.icon} name={dat.name} description={dat.description} quiz={dat.quiz} />
               </div>
             ))}
           </div>
