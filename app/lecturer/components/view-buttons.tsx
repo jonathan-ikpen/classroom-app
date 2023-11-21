@@ -11,39 +11,42 @@ import { Button } from "@/components/ui/button";
 import {MdAssignmentAdd} from "react-icons/md";
 import {SiTestcafe} from "react-icons/si";
 import {GoVideo} from "react-icons/go";
+import Link from "next/link";
 
 const data = [
   {
     name: "view assignments",
     icon: <MdAssignmentAdd/>,
-    link: "",
+    link: "/view/assignments",
   },
   {
     name: "view lecture materials",
     icon: <GoVideo />,
-    link: "",
+    link: "/view/materials",
   },{
     name: "view Quizes",
     icon: <SiTestcafe />,
-    link: "",
+    link: "/view/quizes",
   },
 ];
 
 const ViewButtons = () => {
   return (
     <div className="p-7 grid gap-4 grid-cols-2 lg:grid-cols-3">
-      {data.map((dat) => (
-        <Card className=" sm:h-40 flex flex-col justify-between">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">{dat.name}</CardTitle>
-            {dat.icon}
-          </CardHeader>
-          <CardContent>
-            <Button className="w-full" variant="outline">
-              View
-            </Button>
-          </CardContent>
-        </Card>
+      {data.map((dat, i) => (
+          <Link href={dat.link} key={i}>
+            <Card className=" sm:h-40 flex flex-col justify-between">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium">{dat.name}</CardTitle>
+                {dat.icon}
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" variant="outline">
+                  View
+                </Button>
+              </CardContent>
+            </Card>
+          </Link>
       ))}
     </div>
   );
