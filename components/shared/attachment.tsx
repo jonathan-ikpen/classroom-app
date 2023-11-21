@@ -93,7 +93,7 @@ const Attachments = () => {
                             )}
                             <DialogFooter className="sm:justify-start">
                                 <DialogClose asChild>
-                                    <Button type="button">
+                                    <Button type="button" className="bg-[#333] hover:bg-[#222]">
                                         Add
                                     </Button>
                                 </DialogClose>

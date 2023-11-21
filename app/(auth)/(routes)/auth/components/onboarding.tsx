@@ -123,7 +123,7 @@ export default function OboardingForm() {
                 </div>
             )}
 
-            <Button type="submit" className="w-full bg-prim">
+            <Button type="submit" className="w-full bg-prim hover:bg-[#222]">
                 Submit
             </Button>
         </form>

@@ -37,7 +37,7 @@ export function PopoverComp() {
   return (
     <Popover>
       <PopoverTrigger asChild className="fixed bottom-4 right-4">
-        <Button className="border-2 border-prim rounded-xl grid place-content-center w-14 h-14 bg-[#333]">
+        <Button className="border-2 border-prim rounded-xl grid place-content-center w-14 h-14 bg-[#333] hover:bg-[#222]">
           <AiOutlinePlus className="h-6 w-6  text-slate-100" />
         </Button>
       </PopoverTrigger>

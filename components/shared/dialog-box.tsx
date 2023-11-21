@@ -26,10 +26,10 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description  }) 
         <Dialog>
             <DialogTrigger asChild>
                 <div>
-                    <Button variant={"ghost"} className="text-xl">
+                    <Button variant={"ghost"} className="text-sm md:text-xl">
                         {icon}
                     </Button>
-                    <Button variant={"ghost"} className="text-xl">
+                    <Button variant={"ghost"} className="text-sm md:text-xl">
                         {name}
                     </Button>
                 </div>
@@ -62,7 +62,7 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description  }) 
                     </div>
                 </div>
                 <DialogFooter className="flex-none">
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit" className="bg-[#333] hover:bg-[#222]">Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
