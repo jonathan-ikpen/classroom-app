@@ -35,14 +35,14 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description  }) 
                 </div>
             </DialogTrigger>
             <DialogContent className="fsm:max-w-[425px] sm:max-w-[90%] sm:h-[90%] flex flex-col">
-                <DialogHeader>
+                <DialogHeader className="flex-none">
                     <DialogTitle className={"flex gap-6 text-4xl"}>{icon} {name}</DialogTitle>
                     <DialogDescription>
                         {description}
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
+                <div className="flex-grow flex flex-col gap-4 py-4">
+                    <div className="flex-none grid grid-cols-4 items-center gap-4">
 
                         <Input
                             id="name"
@@ -50,18 +50,18 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description  }) 
                             placeholder="Title"
                         />
                     </div>
-                    <div className="grid grid-cols-4 items-center h-80 gap-4">
+                    <div className="flex-grow grid grid-cols-4 items-center gap-4">
                         <Textarea
                             id="username"
                             placeholder="Instructions (optional)"
                             className="col-span-4 h-full bg-slate-100 p-8 border-none"
                         />
                     </div>
-                    <div className="grid grid-cols-4 items-center">
+                    <div className="flex-none grid grid-cols-4 items-center">
                         <Attachments/>
                     </div>
                 </div>
-                <DialogFooter>
+                <DialogFooter className="flex-none">
                     <Button type="submit">Save changes</Button>
                 </DialogFooter>
             </DialogContent>
