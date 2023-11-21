@@ -26,6 +26,8 @@ const data = [
         placeholder: '<iframe width="560" height="315" src="https://www.youtube.com/embed/Dxcc6ycZ73M?si=s8UEr4WK_3A3Llq-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
         component: '',
         upload: false,
+        type: 'text',
+        name: 'youtubeEmbed'
     },
     {
         label: "Upload",
@@ -34,6 +36,8 @@ const data = [
         placeholder: "",
         component: '',
         upload: true,
+        type: 'file',
+        name: 'file'
     },
     {
         label: "Link",
@@ -42,17 +46,19 @@ const data = [
         placeholder: 'https://youtu.be/Dxcc6ycZ73M?si=tv__7CeAnMXRVCOR',
         component: '',
         upload: false,
+        type: 'url',
+        name: 'resourceLink'
     },
 ]
 
 
-const Attachments = () => {
+const Attachments = ({ register }: any) => {
     return (
         <div>
             <div className={"flex gap-8 items-center px-8 py-4"}>
-                {data.map(dat => (
+                {data.map((dat, i) => (
 
-                    <Dialog>
+                    <Dialog key={i}>
                         <DialogTrigger asChild>
                             <div className="flex flex-col gap-2 items-center justify-center">
                                 <div className={"p-4 cursor-pointer rounded-full border-2 border-slate-100 hover:bg-gray-100 "}>
@@ -68,7 +74,7 @@ const Attachments = () => {
                                     {dat.description}
                                 </DialogDescription>
                             </DialogHeader>
-                            {!dat.upload && (
+
                                 <div className="flex items-center space-x-2">
                                     <div className="grid flex-1 gap-2">
                                         <Label htmlFor="link" className="sr-only">
@@ -76,21 +82,21 @@ const Attachments = () => {
                                         </Label>
                                         <Input
                                             id="link"
+                                            type={dat.type}
                                             defaultValue={dat.placeholder}
-                                            readOnly
+                                            placeholder={dat.placeholder}
+                                            {...register(dat.name)}
                                         />
                                     </div>
-                                    <Button type="submit" size="sm" className="px-3" variant={"secondary"}>
+                                    {!dat.upload && (
+                                        <Button type="submit" size="sm" className="px-3" variant={"secondary"}>
                                         <span className="sr-only">Copy</span>
                                         <Copy className="h-4 w-4"/>
                                     </Button>
+                                    )}
                                 </div>
-                            )}
-                            {dat.upload && (
-                                <div className="flex items-center space-x-2">
-                                    <Input type="file" />
-                                </div>
-                            )}
+
+
                             <DialogFooter className="sm:justify-start">
                                 <DialogClose asChild>
                                     <Button type="button" className="bg-[#333] hover:bg-[#222]">
@@ -99,7 +105,6 @@ const Attachments = () => {
                                 </DialogClose>
                             </DialogFooter>
                         </DialogContent>
-
                     </Dialog>
                 ))}
             </div>
