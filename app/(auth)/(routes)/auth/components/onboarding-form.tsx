@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -7,6 +8,8 @@ import { useRouter } from "next/navigation";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
+
+import axios from "axios"
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,14 +36,15 @@ import toast from "react-hot-toast";
 const formSchema = z.object({
   fname: z.string().min(1, { message: "Invalid first name" }),
   lname: z.string().min(1, { message: "Invalid last name" }),
-  status: z.enum(["LECTURER", "STUDENT"]),
+  user_type: z.enum(["LECTURER", "STUDENT"]),
   matno: z.string().min(1, { message: "Invalid mat number" }),
   class: z.string().min(1, { message: "Invalid class name" }),
 });
 
 const OnboardingForm = () => {
   const router = useRouter();
-  const [authState, loading] = useAuthState(auth);
+  const [userAuth, loading] = useAuthState(auth);
+  console.log(userAuth)
 
   // if (!authState) {
   //   router.push("/auth");
@@ -52,28 +56,48 @@ const OnboardingForm = () => {
     defaultValues: {
       fname: "",
       lname: "",
-      status: "STUDENT",
+      user_type: "STUDENT",
       matno: "",
       class: "",
     },
   });
 
+
+  // const handleSubmission = (values: z.infer<typeof formSchema>) => {
+  //     console.log(values)
+  // }
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+      console.log("Hi from submit func")
     console.log(values);
 
     try {
-      //   logic here
 
+      //   logic here
+        const data = {
+            email: userAuth?.email,
+            username: values.fname + userAuth?.uid,
+            first_name: values.fname,
+            last_name: values.lname,
+            department: values.class ?? values.matno,
+            status: true,
+            user_type: values.user_type,
+        }
+
+        console.log(data)
+        const res = await axios.post('https://codehashira.pythonanywhere.com/register', data)
+
+        console.log(res)
       toast.success("account created");
 
-      // Routing after success
-      if (values.status === "STUDENT") {
-        router.push("/student");
-      }
-      if (values.status === "LECTURER") {
-        router.push("/lecturer");
-      }
+      // // Routing after success
+      // if (values.status === "STUDENT") {
+      //   router.push("/student");
+      // }
+      // if (values.status === "LECTURER") {
+      //   router.push("/lecturer");
+      // }
     } catch (error) {
       console.log(error);
       toast.error("error: " + error);
@@ -118,7 +142,7 @@ const OnboardingForm = () => {
 
         <FormField
           control={form.control}
-          name="status"
+          name="user_type"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Who are you?</FormLabel>
@@ -138,7 +162,7 @@ const OnboardingForm = () => {
           )}
         />
 
-        {form.watch("status") === "STUDENT" && (
+        {form.watch("user_type") === "STUDENT" && (
           <FormField
             control={form.control}
             name="matno"
@@ -154,7 +178,7 @@ const OnboardingForm = () => {
           />
         )}
 
-        {form.watch("status") === "LECTURER" && (
+        {form.watch("user_type") === "LECTURER" && (
           <FormField
             control={form.control}
             name="class"

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import DialogBox from "@/components/shared/dialog-box";
 import {
   Popover,
   PopoverContent,
@@ -16,16 +17,19 @@ const data = [
     name: "Assignment",
     icon: <MdAssignmentAdd />,
     component: "",
+    description: "Add a new assignment"
   },
   {
     name: "Test quiz",
     icon: <SiTestcafe />,
     component: "",
+    description: "Add a new Test Quiz"
   },
   {
     name: "Lecture Material",
     icon: <GoVideo />,
     component: "",
+    description: "Add a new Lecture Material"
   },
 ];
 
@@ -42,12 +46,7 @@ export function PopoverComp() {
           <div className="grid gap-2">
             {data.map((dat) => (
               <div className="flex gap-1 p-4">
-                <Button variant={"ghost"} className="text-xl">
-                  {dat.icon}
-                </Button>
-                <Button variant={"ghost"} className="text-xl">
-                  {dat.name}
-                </Button>
+                  <DialogBox icon={dat.icon} name={dat.name} description={dat.description} />
               </div>
             ))}
           </div>

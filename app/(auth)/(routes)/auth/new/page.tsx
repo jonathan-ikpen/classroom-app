@@ -1,5 +1,5 @@
 import React from "react";
-import OnboardingForm from "../components/onboarding-form";
+import OnboardingForm from "../components/onboarding";
 
 const OnboardingPage = () => {
   return (
