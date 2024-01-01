@@ -16,8 +16,8 @@ export async function POST(req: Request) {
       const createLecturer = await prismadb.lecturer.create({
         data: {
           email,
-          fname,
           lastname,
+          fname: firstname,
           photoUrl,
           course: course_code
         }
@@ -30,11 +30,10 @@ export async function POST(req: Request) {
       const createStudent = await prismadb.student.create({
         data: {
           email,
-          fname,
           lastname,
+          fname: firstname,
           matno: matric_no,
           photoUrl,
-          course: course_code
         }
       })
 

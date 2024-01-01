@@ -31,6 +31,7 @@ type Data = {
 export default function OboardingForm() {
     const [userAuth, loading] = useAuthState(auth);
     const router = useRouter()
+    console.log(userAuth)
 
     const {
         register,
@@ -52,19 +53,18 @@ export default function OboardingForm() {
 
         try {
             //   logic here
+            // { firstname, lastname, email, photoUrl, user_type, matric_no, course_code }
             const data = {
                 email: userAuth?.email,
-                username: userAuth?.displayName?.replace(/ +/g, "") ?? "",
-                first_name: values.fname,
-                last_name: values.lname,
-                department: values.course ?? values.matno,
-                status: true,
+                photoUrl: userAuth?.photoURL,
+                firstname: values.fname,
+                lastname: values.lname,
+                matric_no: values.matno,
+                course_code: values.course,
                 user_type: values.user_type,
-                password: 'classroom',
-                password2: 'classroom'
             }
             console.log(data)
-            const res = await axios.post('https://codehashira.pythonanywhere.com/register', data)
+            const res = await axios.post('/user', data)
 
             console.log(res)
             toast.success("account created");
