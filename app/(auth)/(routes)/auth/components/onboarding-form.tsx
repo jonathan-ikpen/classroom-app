@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
 
-import axios from "axios"
+import axios from "@/lib/axios"
 
 import { Button } from "@/components/ui/button";
 import {

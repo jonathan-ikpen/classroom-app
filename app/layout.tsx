@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/shared/header";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/lib/firebase";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,6 +18,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // const [userAuth, loading] = useAuthState(auth);
+  
   return (
     <html lang="en">
       <body className={inter.className}>

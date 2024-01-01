@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Lecturer {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  fname    String
+  lastname String
+  course   Course?
+  photoUrl String?
+  User     User[]
+}
+
+model Student {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  fname    String
+  lastname String
+  matno    String
+  photoUrl String?
+  courses  Course[] @relation("CourseStudents")
+  User     User[]
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  student    Student  @relation(fields: [studentId], references: [id])
+  lecturer   Lecturer @relation(fields: [lecturerId], references: [id])
+  studentId  Int
+  lecturerId Int
+}
+
+model Course {
+  id          Int            @id @default(autoincrement())
+  title       String
+  createdAt   DateTime       @default(now())
+  lecturerId  Int            @unique
+  lecturer    Lecturer       @relation(fields: [lecturerId], references: [id])
+  students    Student[]      @relation("CourseStudents")
+  exams       Exam[]
+  tests       Test[]
+  assignments Assignment[]
+  videos      LectureVideo[]
+  notes       LectureNote[]
+}
+
+model Exam {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model Test {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model Assignment {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model LectureVideo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  url       String
+  createdAt DateTime @default(now())
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model LectureNote {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id])
+}

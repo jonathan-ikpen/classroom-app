@@ -5,7 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
 
 
-import axios from "axios"
+import axios from "@/lib/axios"
 
 import { Button } from "@/components/ui/button";
 import { useForm, SubmitHandler  } from "react-hook-form";
@@ -25,7 +25,7 @@ type Data = {
     lname: string,
     user_type: string,
     matno: string,
-    class: string,
+    course: string,
 }
 
 export default function OboardingForm() {
@@ -43,7 +43,7 @@ export default function OboardingForm() {
             lname: "",
             user_type: "STUDENT",
             matno: "",
-            class: "",
+            course: "",
         }
     })
 
@@ -57,7 +57,7 @@ export default function OboardingForm() {
                 username: userAuth?.displayName?.replace(/ +/g, "") ?? "",
                 first_name: values.fname,
                 last_name: values.lname,
-                department: values.class ?? values.matno,
+                department: values.course ?? values.matno,
                 status: true,
                 user_type: values.user_type,
                 password: 'classroom',
@@ -118,8 +118,8 @@ export default function OboardingForm() {
             {watch("user_type") === "LECTURER" && (
                 <div className="flex flex-col gap-1">
                     <label>Class</label>
-                    <Input placeholder="COM 101" {...register("class", { required: true })} />
-                    {errors.class && <span className=" text-red-600 text-xs ">Invalid class name</span>}
+                    <Input placeholder="COM 101" {...register("course", { required: true })} />
+                    {errors.course && <span className=" text-red-600 text-xs ">Invalid class name</span>}
                 </div>
             )}
 
