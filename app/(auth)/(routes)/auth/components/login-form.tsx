@@ -3,10 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 import {
   useCreateUserWithEmailAndPassword,
+    useSignInWithEmailAndPassword,
   useAuthState,
 } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
@@ -37,10 +38,12 @@ const formSchema = z.object({
     }),
 });
 
-const LoginForm = () => {
+const LoginForm = ({ slug }: { slug?: string }) => {
   const router = useRouter();
-  const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
+
+  const [createUserWithEmailAndPassword, createdUser, cLoading, cError] = useCreateUserWithEmailAndPassword(auth);
+
+  const [signInWithEmailAndPassword, loggedUser, loggedLoading, loggedError] = useCreateUserWithEmailAndPassword(auth)
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,15 +58,40 @@ const LoginForm = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
 
-    try {
-      await createUserWithEmailAndPassword(values.email, values.password);
+      if(slug === '/signup') {
+          console.log("creating account...")
+          try {
+              const res = await createUserWithEmailAndPassword(values.email, values.password)
+              console.log(res)
+              createdUser && toast.success("account created");
+              createdUser && console.log("account created")
+              // createdUser && router.push("/auth/new");
 
-      toast.success("account created");
-      router.push("/auth/new");
-    } catch (error) {
-      console.log(error);
-      toast.error("error: " + error);
-    }
+              cError && toast.error("error: " + cError?.message);
+              cError && console.log(cError)
+          } catch(err) {
+              console.log(err)
+              console.log(cError)
+              toast.error("error: " + cError?.message);
+          }
+      }
+
+      if(slug === '/login') {
+          console.log("signing in...")
+          try {
+              const res = await signInWithEmailAndPassword(values.email, values.password)
+              console.log(res)
+              loggedUser && console.log("login successful")
+              loggedUser && toast.success("logged in successfully")
+
+              loggedError && toast.error("error: " + loggedError?.message)
+              loggedError && console.log(loggedError)
+          } catch (err) {
+              console.log(err)
+              console.log(loggedError)
+              toast.error("error: " + loggedError?.message);
+          }
+      }
   }
 
   return (
@@ -97,7 +125,7 @@ const LoginForm = () => {
           )}
         />
         {/* Form Button  */}
-        <Button disabled={loading} type="submit" className="w-full bg-prim">
+        <Button disabled={cLoading || loggedLoading} type="submit" className="w-full bg-prim">
           Submit
         </Button>
         <div className="relative">

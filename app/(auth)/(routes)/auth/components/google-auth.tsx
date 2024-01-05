@@ -17,7 +17,7 @@ const GoogleAuth = () => {
     //  if (currentUser?.data?.member?.id === userAuth?.uid) {
     //    router.push("/app");
     //  }
-    console.log("Not logged in");
+    // console.log("Not logged in");
   }
 
   const handleAuth = async () => {

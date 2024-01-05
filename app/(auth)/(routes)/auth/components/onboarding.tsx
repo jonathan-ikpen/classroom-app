@@ -55,8 +55,8 @@ export default function OboardingForm() {
             //   logic here
             // { firstname, lastname, email, photoUrl, user_type, matric_no, course_code }
             const data = {
-                email: userAuth?.email,
-                photoUrl: userAuth?.photoURL,
+                email: userAuth?.email || 'jay@test.com',
+                photoUrl: userAuth?.photoURL || '',
                 firstname: values.fname,
                 lastname: values.lname,
                 matric_no: values.matno,
@@ -65,22 +65,41 @@ export default function OboardingForm() {
             }
             console.log(data)
             const res = await axios.post('/user', data)
+                .then(function (response) {
+                    // handle success
+                    console.log(response);
+                    toast.success("account created");
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error.response.data);
+                    throw new Error(error.response.data)
+                })
 
-            console.log(res)
+            // const res = await fetch('/api/user', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(data),
+            // });
+
+
+            // console.log(res)
             toast.success("account created");
 
             // // Routing after success
-            if (res.statusText == "OK") {
-                if (values.user_type === "STUDENT") {
-                  router.push("/student");
-                }
-                if (values.user_type === "LECTURER") {
-                  router.push("/lecturer");
-                }
-            }
+            // if (res.statusText == "OK") {
+            //     if (values.user_type === "STUDENT") {
+            //       router.push("/student");
+            //     }
+            //     if (values.user_type === "LECTURER") {
+            //       router.push("/lecturer");
+            //     }
+            // }
         } catch (error) {
-            console.log(error);
-            toast.error("error: " + error);
+            console.log(await error);
+            toast.error("" + error);
         }
     }
 

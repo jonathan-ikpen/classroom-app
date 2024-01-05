@@ -12,41 +12,41 @@ export async function POST(req: Request) {
       return new NextResponse("Invalid email", { status: 401 });
     }
 
-    if (user_type === "LECTURER") {
-      const createLecturer = await prismadb.lecturer.create({
-        data: {
-          email,
-          lastname,
-          fname: firstname,
-          photoUrl,
-          course: course_code
-        }
-      })
+    const existingUser = await prismadb.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
 
-      return NextResponse.json({
-        createLecturer,
-      });
-    } else if (user_type === "STUDENT") {
-      const createStudent = await prismadb.student.create({
-        data: {
-          email,
-          lastname,
-          fname: firstname,
-          matno: matric_no,
-          photoUrl,
-        }
-      })
-
-      return NextResponse.json({
-        createStudent,
-      });
+    if(existingUser) {
+      return new NextResponse("User Already Exist", { status: 401 });
     }
+
+    const createdUser = await prismadb.user.create({
+        data: {
+          email,
+          firstName: firstname,
+          lastName: lastname,
+          role: user_type,
+          photoUrl,
+          matno: matric_no,
+          course: {
+            create: {
+              title: course_code,
+            }
+          },
+        }});
+
+      return NextResponse.json({
+        createdUser,
+      });
 
   } catch (error) {
     console.log("[Members_Post]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-}
+
+  }
 
 export async function GET(req: Request) {
   try {
