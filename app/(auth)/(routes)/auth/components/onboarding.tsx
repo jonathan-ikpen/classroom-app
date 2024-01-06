@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
+import { useAuth } from "@/utils/contextfile";
 
 
 import axios from "@/lib/axios"
@@ -29,9 +30,9 @@ type Data = {
 }
 
 export default function OboardingForm() {
-    const [userAuth, loading] = useAuthState(auth);
+    const { isAuthenticated, user, login, logout } = useAuth();
     const router = useRouter()
-    console.log(userAuth)
+    console.log(user)
 
     const {
         register,
@@ -55,8 +56,6 @@ export default function OboardingForm() {
             //   logic here
             // { firstname, lastname, email, photoUrl, user_type, matric_no, course_code }
             const data = {
-                email: userAuth?.email || 'jay@test.com',
-                photoUrl: userAuth?.photoURL || '',
                 firstname: values.fname,
                 lastname: values.lname,
                 matric_no: values.matno,
@@ -64,7 +63,8 @@ export default function OboardingForm() {
                 user_type: values.user_type,
             }
             console.log(data)
-            const res = await axios.post('/user', data)
+            console.log(await user.id)
+            const res = await axios.patch(`/user/${user.id}`, data)
                 .then(function (response) {
                     // handle success
                     console.log(response);
@@ -75,14 +75,6 @@ export default function OboardingForm() {
                     console.log(error.response.data);
                     throw new Error(error.response.data)
                 })
-
-            // const res = await fetch('/api/user', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(data),
-            // });
 
 
             // console.log(res)

@@ -1,4 +1,4 @@
-import LoginForm from "../components/login-form";
+import LoginForm from "../components/login-form-v2";
 
 export default function Page({ params }: { params: { auth: string } }) {
     // console.log(params.auth)

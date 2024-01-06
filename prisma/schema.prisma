@@ -18,6 +18,7 @@ model User {
   courses_enrolled CourseEnrollment[]
   course           Course?            @relation("CreatedCourse")
   matno            String?
+  password         String?
 }
 
 model Course {

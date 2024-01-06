@@ -44,6 +44,20 @@ const LoginForm = ({ slug }: { slug?: string }) => {
   const [createUserWithEmailAndPassword, createdUser, cLoading, cError] = useCreateUserWithEmailAndPassword(auth);
 
   const [signInWithEmailAndPassword, loggedUser, loggedLoading, loggedError] = useCreateUserWithEmailAndPassword(auth)
+  const formatError = async (error: any) => {
+        // Extract the actual error message
+        const errorMessage = error?.message.split(' (')[1].split(').')[0].replace('auth/', '');
+
+        // Remove hyphens and create a user-friendly sentence
+        const userFriendlyErrorMessage = errorMessage.replace(/-/g, ' ') + '.';
+
+        // Display the error message in your UI
+        // console.log(userFriendlyErrorMessage);
+
+        return userFriendlyErrorMessage;
+
+    }
+
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -62,17 +76,20 @@ const LoginForm = ({ slug }: { slug?: string }) => {
           console.log("creating account...")
           try {
               const res = await createUserWithEmailAndPassword(values.email, values.password)
-              console.log(res)
+              createdUser && console.log(res)
               createdUser && toast.success("account created");
               createdUser && console.log("account created")
               // createdUser && router.push("/auth/new");
 
-              cError && toast.error("error: " + cError?.message);
-              cError && console.log(cError)
+              // console.log(cError)
+              // cError && console.log(cError.message)
+              cError && toast.error(" " + await formatError(cError));
           } catch(err) {
-              console.log(err)
+              // console.log(err)
+              // toast.error("error: " + cError?.message);
+
               console.log(cError)
-              toast.error("error: " + cError?.message);
+              toast.error("error: " + await formatError(cError));
           }
       }
 
@@ -80,16 +97,16 @@ const LoginForm = ({ slug }: { slug?: string }) => {
           console.log("signing in...")
           try {
               const res = await signInWithEmailAndPassword(values.email, values.password)
-              console.log(res)
+              loggedUser && console.log(res)
               loggedUser && console.log("login successful")
               loggedUser && toast.success("logged in successfully")
 
-              loggedError && toast.error("error: " + loggedError?.message)
-              loggedError && console.log(loggedError)
+              loggedError && toast.error(" " + await formatError(loggedError))
+              loggedError && console.log(loggedError?.message)
           } catch (err) {
-              console.log(err)
+              // console.log(err)
               console.log(loggedError)
-              toast.error("error: " + loggedError?.message);
+              toast.error("" + await formatError(loggedError));
           }
       }
   }

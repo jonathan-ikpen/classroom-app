@@ -3,8 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/shared/header";
+import { AuthProvider } from "@/utils/contextfile";
 import { getCurrentUser } from "@/app/server/action";
 import OnboardingPage from "./(auth)/(routes)/auth/new/components/oboarding-page"
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,9 +24,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+      <AuthProvider>
         <Header />
         <Toaster />
         {children}
+      </AuthProvider>
       </body>
     </html>
   );
