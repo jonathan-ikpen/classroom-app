@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
         const isUser = existingUser?.password === password
 
-        if(!isUser) return new NextResponse("User Credential does not Match")
+        if(!isUser) return new NextResponse("User Credential does not Match", { status: 401 })
 
 
         return NextResponse.json({
