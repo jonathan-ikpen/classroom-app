@@ -1,5 +1,7 @@
+"use client"
 import React from "react";
 import OnboardingForm from "../components/onboarding";
+import PrivateRoute from "@/utils/PrivateRoute";
 
 const OnboardingPage = () => {
   return (
@@ -9,4 +11,4 @@ const OnboardingPage = () => {
   );
 };
 
-export default OnboardingPage;
+export default PrivateRoute(OnboardingPage);

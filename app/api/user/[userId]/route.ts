@@ -1,7 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export async function PATCH(req: Request, { params }: { params: { userId: number } }) {
+export async function PATCH(req: Request, { params }: { params: { userId: string } }) {
     try {
         // requesting data from frontend
         const body = await req.json();
@@ -14,18 +14,29 @@ export async function PATCH(req: Request, { params }: { params: { userId: number
         }
 
         const updatedUser = await prismadb.user.update({
-            where: { id: params.userId },
+            where: { id: Number(params.userId) },
             data: {
                 firstName: firstname,
                 lastName: lastname,
                 role: user_type,
                 matno: matric_no,
-                course: {
-                    create: {
-                        title: course_code,
-                    }
-                },
+                // course: {
+                //     create: {
+                //         title: course_code,
+                //     }
+                // },
             }});
+
+        // Check if the course_code is provided
+        if (course_code) {
+            // Create a new course and associate it with the user
+            const createdCourse = await prismadb.course.create({
+                data: {
+                    title: course_code,
+                    createdBy: Number(params.userId),
+                },
+            });
+        }
 
         return NextResponse.json({
             success: true,

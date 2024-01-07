@@ -15,7 +15,7 @@ export default function PrivateRoute (WrappedComponent: React.ComponentType<Priv
 
         useEffect(() => {
             if (!isAuthenticated) {
-                router.push('/login');
+                router.push('/auth/login');
             }
         }, [isAuthenticated]);
 

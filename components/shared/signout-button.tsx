@@ -1,19 +1,16 @@
 "use client";
 import React from "react";
 import { Button } from "../ui/button";
-import { useSignOut, useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/lib/firebase";
+import { useAuth } from "@/utils/contextfile";
 import toast from "react-hot-toast";
 
 const SignOutButton = () => {
-  const [signOut, loading, error] = useSignOut(auth);
+  const { isAuthenticated, user, login, logout } = useAuth();
 
   const handleSignOut = async () => {
-    const success = await signOut();
-    if (success) {
+    logout();
+    if (!isAuthenticated) {
       toast.success("You are signed out");
-    } else {
-      toast.error("error: " + error);
     }
   };
   return (

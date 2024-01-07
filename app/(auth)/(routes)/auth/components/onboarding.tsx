@@ -29,7 +29,7 @@ type Data = {
 export default function OboardingForm() {
     const { isAuthenticated, user, login, logout } = useAuth();
     const router = useRouter()
-    console.log(user)
+    // console.log(user)
 
     const {
         register,
@@ -61,11 +61,19 @@ export default function OboardingForm() {
             }
             console.log(data)
             console.log(await user.id)
-            const res = await axios.patch(`/user/${user.id}`, data)
+            const res = await axios.patch(`/user/${Number(user.id)}`, data)
                 .then(function (response) {
                     // handle success
                     console.log(response);
                     toast.success("account created");
+
+                    // Routing after success
+                    if (values.user_type === "STUDENT") {
+                        router.push("/student");
+                    }
+                    if (values.user_type === "LECTURER") {
+                        router.push("/lecturer");
+                    }
                 })
                 .catch(function (error) {
                     // handle error
@@ -74,18 +82,6 @@ export default function OboardingForm() {
                 })
 
 
-            // console.log(res)
-            toast.success("account created");
-
-            // // Routing after success
-            // if (res.statusText == "OK") {
-            //     if (values.user_type === "STUDENT") {
-            //       router.push("/student");
-            //     }
-            //     if (values.user_type === "LECTURER") {
-            //       router.push("/lecturer");
-            //     }
-            // }
         } catch (error) {
             console.log(await error);
             toast.error("" + error);

@@ -3,12 +3,11 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import SignOutButton from "./signout-button";
-import { auth } from "@/lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuth } from "@/utils/contextfile";
 import LoginButton from "./login-button";
 
 const Header = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const { isAuthenticated, user, login, logout } = useAuth();
 
   return (
     <header className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 border-b dark:border-zinc-800">
@@ -47,7 +46,7 @@ const Header = () => {
           Videos
         </Link>
       </nav>
-      {user ? <SignOutButton /> : <LoginButton />}
+      {isAuthenticated ? <SignOutButton /> : <LoginButton />}
     </header>
   );
 };

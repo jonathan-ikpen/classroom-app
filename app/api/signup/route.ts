@@ -18,18 +18,29 @@ export async function POST(req: Request) {
             },
         });
 
-        const isUser = existingUser?.password === password
+        if(existingUser) {
+            return new NextResponse("User Already Exist", { status: 401 });
+        }
 
-        if(!isUser) return new NextResponse("User Credential does not Match")
-
+        const createdUser = await prismadb.user.create({
+            data: {
+                email,
+                firstName: "",
+                lastName: "",
+                role: "",
+                photoUrl: "",
+                matno: "",
+                password,
+            }});
 
         return NextResponse.json({
             success: true,
-            data: existingUser,
-            isUser,
+            data: createdUser,
         });
+
     } catch (error) {
-        console.log("[Users_Get]", error);
+        console.log("[Members_Post]", error);
         return new NextResponse("Internal error", { status: 500 });
     }
+
 }

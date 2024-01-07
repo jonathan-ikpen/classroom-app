@@ -1,4 +1,6 @@
+"use client"
 import React from "react";
+import PrivateRoute from "@/utils/PrivateRoute";
 
 const StudentPage = () => {
   return (
@@ -10,4 +12,4 @@ const StudentPage = () => {
   );
 };
 
-export default StudentPage;
+export default PrivateRoute(StudentPage);

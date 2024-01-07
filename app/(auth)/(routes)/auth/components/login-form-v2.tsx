@@ -32,12 +32,21 @@ const formSchema = z.object({
             message:
                 "Password must contain at least one lowercase letter, one uppercase letter, and one digit",
         }),
+    confirm_password: z
+        .string()
+        .min(8, { message: "Password must be at least 8 characters long" })
+        .max(20, { message: "Password can be at most 20 characters long" })
+        .refine((value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(value), {
+            message:
+                "Password must contain at least one lowercase letter, one uppercase letter, and one digit",
+        }),
 });
 
 const LoginForm = ({ slug }: { slug?: string }) => {
-    const { isAuthenticated, user: userC, login, logout } = useAuth();
+    const { isAuthenticated, user, login, logout } = useAuth();
     const router = useRouter();
     const [loading, setLoading] = useState(false)
+    const [slugL, setSlugL] = useState(slug)
 
 
 
@@ -47,43 +56,78 @@ const LoginForm = ({ slug }: { slug?: string }) => {
         defaultValues: {
             email: "",
             password: "",
+            confirm_password: ""
         },
     });
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoading(true)
         console.log(values);
 
-        if(slug === '/signup') {
+        if(slugL == '/signup') {
             console.log("creating account...")
             try {
+                if(values.password !== values.confirm_password) {
+                    form.setError('password', {
+                        type: 'manual',
+                        message: 'Make Password Match',
+                    }, {
+                        shouldFocus: true,
+                    })
+                    form.setError('confirm_password', {
+                        type: 'manual',
+                        message: 'Make Password Match',
+                    }, {
+                        shouldFocus: true,
+                    })
+                    toast.error("password does not match")
+                    return
+                }
+
                 const data = {
                     email: values.email,
                     password: values.password
                 }
-                const res = await axios.post('/login', data)
+                const res = await axios.post('/signup', data)
                 console.log(await res.data.data)
 
                 if (res.statusText == "OK" || res.data.success) {
                     login(await res.data.data)
                     toast.success("registration successful! redirecting...");
-                    // router.push("/auth/new/");
-                    console.log(await isAuthenticated)
-                    console.log(await userC)
+                    router.push("/auth/new/");
                 }
             } catch(err: any) {
                 console.log(err?.response?.data)
                 toast.error("" + err?.response?.data);
+            } finally {
+                setLoading(false)
             }
         }
 
-        if(slug === '/login') {
+        if(slugL == '/login') {
             console.log("signing in...")
             try {
 
-            } catch (err) {
-                // console.log(err)
-                // toast.error("" + err);
+                const data = {
+                    email: values.email,
+                    password: values.password
+                }
+                const res = await axios.post('/login', data)
+                console.log(await res.data.isUser)
+                console.log(await res.data.data)
+
+                if (res.statusText == "OK" || res.data.success) {
+                    login(await res.data.data)
+                    toast.success("login successful! redirecting...");
+                    // router.push("/auth/new/");
+                }
+
+            } catch (err: any) {
+                console.log(err?.response?.data)
+                toast.error("" + err?.response?.data);
+            } finally {
+                setLoading(false)
             }
         }
     }
@@ -112,12 +156,25 @@ const LoginForm = ({ slug }: { slug?: string }) => {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl className="">
-                                <Input placeholder="password" {...field} />
+                                <Input placeholder="password" type="password" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+                {/* Confirm Password  */}
+                {slugL === '/signup' && (<FormField
+                    control={form.control}
+                    name="confirm_password"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormControl className="">
+                                <Input placeholder="confirm password" type="password" {...field} />
+                            </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
+                />)}
                 {/* Form Button  */}
                 <Button disabled={loading} type="submit" className="w-full bg-prim">
                     Submit
