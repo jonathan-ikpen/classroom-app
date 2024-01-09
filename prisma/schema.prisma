@@ -33,8 +33,7 @@ model Course {
   exams       Exam[]
   tests       Test[]
   assignments Assignment[]
-  videos      LectureVideo[]
-  notes       LectureNote[]
+  materials   LectureMaterial[]
 }
 
 model CourseEnrollment {
@@ -60,41 +59,36 @@ model Exam {
 }
 
 model Test {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  title        String
+  quizId       String
+  instructions String?
+  createdAt    DateTime @default(now())
   // Relation Fields
-  courseId  Int
-  course    Course   @relation(fields: [courseId], references: [id])
+  courseId     Int
+  course       Course   @relation(fields: [courseId], references: [id])
 }
 
 model Assignment {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  title        String
+  instructions String?
+  url          String?
+  upload       String?
+  createdAt    DateTime @default(now())
   // Relation Fields
-  courseId  Int
-  course    Course   @relation(fields: [courseId], references: [id])
+  courseId     Int
+  course       Course   @relation(fields: [courseId], references: [id])
 }
 
-model LectureVideo {
-  id        Int      @id @default(autoincrement())
-  title     String
-  url       String
-  createdAt DateTime @default(now())
+model LectureMaterial {
+  id           Int      @id @default(autoincrement())
+  title        String
+  instructions String?
+  url          String?
+  upload       String?
+  createdAt    DateTime @default(now())
   // Relation Fields
-  courseId  Int
-  course    Course   @relation(fields: [courseId], references: [id])
-}
-
-model LectureNote {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  // Relation Fields
-  courseId  Int
-  course    Course   @relation(fields: [courseId], references: [id])
+  courseId     Int
+  course       Course   @relation(fields: [courseId], references: [id])
 }

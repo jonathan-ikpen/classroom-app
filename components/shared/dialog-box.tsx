@@ -17,9 +17,8 @@ import {ReactElement} from "react";
 import Attachments from "@/components/shared/attachment";
 import toast from "react-hot-toast";
 import { useForm, SubmitHandler  } from "react-hook-form";
-import axios from "axios"
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/lib/firebase";
+import { useAuth } from "@/utils/contextfile";
+import axios from "@/lib/axios"
 
 interface CompProps {
     children?: ReactNode;
@@ -27,6 +26,7 @@ interface CompProps {
     name: string,
     description: string,
     quiz: boolean,
+    type: string,
 }
 
 type Data = {
@@ -35,12 +35,32 @@ type Data = {
     user_type: string,
     class: string,
     youtubeEmbed?: string,
-    file?: File,
+    file: [File],
     resourceLink?: string,
     filloutId?: string,
 }
 
-const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, quiz  }) => {
+const readFileAsBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        if(!file) resolve('')
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const base64String = reader.result as string;
+            resolve(base64String.split(",")[1] || ''); // Remove data:image/jpeg;base64, prefix
+        };
+
+        reader.onerror = (error) => {
+            reject(error);
+        };
+
+        reader.readAsDataURL(file);
+    });
+};
+
+const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, quiz, type  }) => {
+    const { isAuthenticated, user, login, logout } = useAuth();
     const {
         register,
         handleSubmit,
@@ -58,7 +78,87 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, qui
     const quizTitleStyle = 'border-0 focus-visible:border-none rounded-none bg-gray-50 col-span-4 p-8 w-full border-b border-prim shadow-none';
     const notQuizTitleStyle = 'col-span-4 p-8 w-full border-none bg-gray-100 focus:border-none outline-0 focus:outline-0 active:border-none ring-0 ';
 
-    const onSubmit: SubmitHandler<Data> = async (values) => console.log(values)
+    const onSubmit: SubmitHandler<Data> = async (values) => {
+        console.log(values)
+        const fileUpload = await readFileAsBase64(values.file?.[0]) || '';
+
+        try {
+            //   logic here
+            // { user_id, title, quizId, instructions, url, upload, assignment, exam, test, lectureMaterial, }
+            const data = {
+                user_id: user.id,
+                title: values.title,
+                quizId: values.filloutId,
+                instructions: values.instruction,
+                url: values.resourceLink,
+                upload: fileUpload,
+                user_type: values.user_type,
+                class: values.class,
+                youtubeEmbed: values.youtubeEmbed,
+            }
+            console.log(data)
+            console.log(await user.id)
+
+            if(type == 'assignment') {
+                const assignmentData = {
+                    ...data,
+                    assignment: true,
+                }
+                const res = await axios.post(`/course/`, assignmentData)
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                        toast.success(`${name} created successfully!`);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error.response.data);
+                        throw new Error(error.response.data)
+                    })
+            }
+
+            if(type == 'quiz') {
+                const testData = {
+                    ...data,
+                    test: true,
+                }
+                const res = await axios.post(`/course/`, testData)
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                        toast.success(`${name} created successfully!`);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error.response.data);
+                        throw new Error(error.response.data)
+                    })
+            }
+
+            if(type == 'lectureMaterial') {
+                const lectureData = {
+                    ...data,
+                    lectureMaterial: true,
+                }
+                const res = await axios.post(`/course/`, lectureData)
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                        toast.success(`${name} created successfully!`);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error.response.data);
+                        throw new Error(error.response.data)
+                    })
+            }
+
+
+        } catch (error) {
+            console.log(await error);
+            toast.error("" + error);
+        }
+    }
 
     return (
 

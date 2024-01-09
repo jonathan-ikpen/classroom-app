@@ -15,6 +15,7 @@ import { GoVideo } from "react-icons/go";
 const data = [
   {
     name: "Assignment",
+    type: "assignment",
     icon: <MdAssignmentAdd />,
     component: "",
     description: "Add a new assignment",
@@ -22,6 +23,7 @@ const data = [
   },
   {
     name: "Test quiz",
+    type: "quiz",
     icon: <SiTestcafe />,
     component: "",
     description: `Add a new Test Quiz. <br> Go to <a href="https://fillout.com" class="text-green-600 underline">fillout.com</a> create a new Test Quiz and Copy Quiz Id`,
@@ -29,6 +31,7 @@ const data = [
   },
   {
     name: "Lecture Material",
+    type: "lectureMaterial",
     icon: <GoVideo />,
     component: "",
     description: "Add a new Lecture Material",
@@ -48,8 +51,8 @@ export function PopoverComp() {
         <div className="grid gap-4">
           <div className="grid gap-2">
             {data.map((dat) => (
-              <div className="flex gap-1 p-4">
-                  <DialogBox icon={dat.icon} name={dat.name} description={dat.description} quiz={dat.quiz} />
+              <div key={dat.name} className="flex gap-1 p-4">
+                  <DialogBox icon={dat.icon} name={dat.name} type={dat.type} description={dat.description} quiz={dat.quiz} />
               </div>
             ))}
           </div>

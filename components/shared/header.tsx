@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useState} from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import SignOutButton from "./signout-button";
@@ -29,23 +29,21 @@ const Header = () => {
         </svg>
         <span className="text-lg font-semibold">PTI ClassRoom</span>
       </Link>
-      <nav className="hidden lg:flex gap-6">
-        <Link className="font-medium" href="#">
+
+      {isAuthenticated && (<nav className="hidden md:flex gap-6">
+        <Link className="font-medium" href={`/${user.role.toLowerCase()}`}>
           Dashboard
         </Link>
-        <Link className="font-medium" href="#">
-          Classrooms
-        </Link>
-        <Link className="font-medium" href="#">
+        <Link className="font-medium" href={`/view/assignments?id=${user.id}`}>
           Assignments
         </Link>
-        <Link className="font-medium" href="#">
-          Notes
+        <Link className="font-medium" href={`/view/materials?id=${user.id}`}>
+          Materials
         </Link>
-        <Link className="font-medium" href="#">
-          Videos
+        <Link className="font-medium" href={`/view/quizes?id=${user.id}`}>
+          Tests
         </Link>
-      </nav>
+      </nav>)}
       {isAuthenticated ? <SignOutButton /> : <LoginButton />}
     </header>
   );

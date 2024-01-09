@@ -37,6 +37,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
+
+    // Check if running on the server, and provide a dummy context for SSR.
+    if (!context && typeof window === 'undefined') {
+        return {
+            isAuthenticated: false,
+            user: null,
+            login: () => {},
+            logout: () => {},
+        };
+    }
+
     if (!context) {
         throw new Error('useAuth must be used within an AuthProvider');
     }
