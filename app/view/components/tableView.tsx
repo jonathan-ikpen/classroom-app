@@ -1,6 +1,6 @@
 "use client"
 import {useAuth} from "@/utils/contextfile";
-import {useEffect, useState} from "react";
+import {ReactElement, useEffect, useState} from "react";
 import {
     Table,
     TableBody,
@@ -11,8 +11,19 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { getMaterials, getTests, getAssignments, testingActions } from "@/app/server/action";
+
+import DialogBox from "@/components/shared/view-dialog-box";
+
+
 import { timeAgoAndFormattedDate } from "@/lib/time_formatter"
+import { MdDelete } from "react-icons/md";
+import { RxOpenInNewWindow } from "react-icons/rx";
+import prismadb from "@/lib/prismadb";
+import { deleteTest, deleteMaterials, deleteAssignments, testingDeleter } from "@/app/server/action";
+import { useRouter }  from "next/navigation";
+import PrivateRoute from "@/utils/PrivateRoute";
+import { toast } from "react-hot-toast";
+import {AiOutlinePlus} from "react-icons/ai";
 
 
 const invoices = [
@@ -60,15 +71,33 @@ const invoices = [
     },
 ]
 
-export default async function TableView({ params, data }: { data: any, params: { slug: string } }) {
-    const { isAuthenticated, user, login, logout } = useAuth();
-    console.log(params.slug)
-    console.log(data)
+const TableView = ({ params, data }: { data: any, params: { slug: string } }) => {
+    const router = useRouter()
+    const [tableData, setTableData] = useState(data);
+    const [isQuiz, setIsQuiz] = useState(params.slug.includes('quizes'))
+    // console.log(params.slug)
+    // console.log(data)
 
+    const handleDelete = async (id: number) => {
+        if (window.confirm('Do you want to delete this?')) {
+            if (params.slug.includes('assignment')) {
+                console.log("Deleting assignment:", await deleteAssignments(id));
+            } else if (params.slug.includes('materials')) {
+                console.log('Deleting material no.:', await deleteMaterials(id));
+            } else if (params.slug.includes('quizes')) {
+                console.log('Deleting quiz no.:', await deleteTest(id));
+            }
+
+            // Update the state to trigger a re-render
+            setTableData((prevData: any) => prevData.filter((item: any) => item.id !== id));
+            toast.success('deleted successfully. please wait for page to reload...')
+            router.refresh()
+        }
+    }
 
     return (
             <Table>
-                <TableCaption>A list of your recent invoices.</TableCaption>
+                <TableCaption>A list of your {params.slug}.</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[100px]">id</TableHead>
@@ -78,21 +107,26 @@ export default async function TableView({ params, data }: { data: any, params: {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.map((dat: any) => (
+                    {tableData.map((dat: any) => (
                         <TableRow key={dat.id}>
                             <TableCell className="font-medium">{dat.id}</TableCell>
                             <TableCell>{dat.title}</TableCell>
                             <TableCell>{timeAgoAndFormattedDate(dat.createdAt.toString()).ago}</TableCell>
-                            <TableCell className="text-right">{'delete'}</TableCell>
+                            <TableCell className="text-right flex gap-10 justify-end items-center">
+                                <DialogBox icon={<RxOpenInNewWindow className="cursor-pointer text-blue-600 text-2xl" />} date={timeAgoAndFormattedDate(dat.createdAt.toString()).ago} data={dat} quiz={isQuiz}/>
+                                <MdDelete onClick={() => handleDelete(dat.id)} className="cursor-pointer text-red-400 inline-block text-2xl" />
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
                 <TableFooter>
                     <TableRow>
-                        <TableCell colSpan={3}>Total</TableCell>
-                        <TableCell className="text-right">$2,500.00</TableCell>
+                        <TableCell colSpan={3}></TableCell>
+                        <TableCell className="text-right"></TableCell>
                     </TableRow>
                 </TableFooter>
             </Table>
     )
 }
+
+export default PrivateRoute(TableView)

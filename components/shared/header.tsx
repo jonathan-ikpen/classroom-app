@@ -31,16 +31,16 @@ const Header = () => {
       </Link>
 
       {isAuthenticated && (<nav className="hidden md:flex gap-6">
-        <Link className="font-medium" href={`/${user.role.toLowerCase()}`}>
+        <Link className="font-medium" href={`/${user.role.toLowerCase()}`} prefetch={false}>
           Dashboard
         </Link>
-        <Link className="font-medium" href={`/view/assignments?id=${user.id}`}>
+        <Link className="font-medium" href={`/view/assignments?id=${user.id}`} prefetch={false}>
           Assignments
         </Link>
-        <Link className="font-medium" href={`/view/materials?id=${user.id}`}>
+        <Link className="font-medium" href={`/view/materials?id=${user.id}`} prefetch={false}>
           Materials
         </Link>
-        <Link className="font-medium" href={`/view/quizes?id=${user.id}`}>
+        <Link className="font-medium" href={`/view/quizes?id=${user.id}`}  prefetch={false}>
           Tests
         </Link>
       </nav>)}

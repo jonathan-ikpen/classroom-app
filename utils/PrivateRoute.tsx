@@ -1,28 +1,33 @@
 // utils/privateRoute.tsx
-"use client"
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from "@/utils/contextfile";
+import { useAuth } from '@/utils/contextfile';
 
 interface PrivateRouteProps {
-    // You can define any additional props that your WrappedComponent accepts
+    params?: { slug: string };
+    searchParams?: { [key: string]: string | string[] | undefined };
+    data?: any
 }
 
-export default function PrivateRoute (WrappedComponent: React.ComponentType<PrivateRouteProps>) {
-    const Wrapper: React.FC<PrivateRouteProps> = (props) => {
+export default function PrivateRoute<T extends PrivateRouteProps>(WrappedComponent: React.ComponentType<T>) {
+    const Wrapper: React.FC<T> = (props) => {
         const { isAuthenticated } = useAuth();
         const router = useRouter();
 
         useEffect(() => {
+            if (isAuthenticated === null) {
+                // Still loading authentication state, do nothing
+                return;
+            }
+
             if (!isAuthenticated) {
                 router.push('/auth/login');
             }
         }, [isAuthenticated]);
 
-        // Render the wrapped component if the user is authenticated
-        return <>{isAuthenticated ? <WrappedComponent {...props} /> : null}</>;
+        // Render the wrapped component only if the authentication state is known
+        return <>{isAuthenticated !== null && isAuthenticated ? <WrappedComponent {...props} /> : null}</>;
     };
 
     return Wrapper;
-};
-
+}

@@ -38,7 +38,7 @@ const ViewButtons = () => {
   return (
     <div className="p-7 grid gap-4 grid-cols-2 lg:grid-cols-3">
       {data.map((dat, i) => (
-          <Link href={dat.link + `?id=${user.id}`} key={i}>
+          <Link href={dat.link + `?id=${user.id}`} key={i} prefetch={false}>
             <Card className=" sm:h-40 flex flex-col justify-between">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-sm font-medium">{dat.name}</CardTitle>

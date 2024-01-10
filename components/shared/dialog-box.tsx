@@ -1,5 +1,6 @@
 "use client"
-import React, {ReactNode} from "react"
+import React, {ReactNode, useState} from "react"
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -60,7 +61,9 @@ const readFileAsBase64 = (file: File): Promise<string> => {
 };
 
 const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, quiz, type  }) => {
+    const router = useRouter()
     const { isAuthenticated, user, login, logout } = useAuth();
+    const [loading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -80,6 +83,7 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, qui
 
     const onSubmit: SubmitHandler<Data> = async (values) => {
         console.log(values)
+        setLoading(true)
         const fileUpload = await readFileAsBase64(values.file?.[0]) || '';
 
         try {
@@ -109,6 +113,7 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, qui
                         // handle success
                         console.log(response);
                         toast.success(`${name} created successfully!`);
+                        router.refresh()
                     })
                     .catch(function (error) {
                         // handle error
@@ -127,6 +132,7 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, qui
                         // handle success
                         console.log(response);
                         toast.success(`${name} created successfully!`);
+                        router.refresh()
                     })
                     .catch(function (error) {
                         // handle error
@@ -145,6 +151,7 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, qui
                         // handle success
                         console.log(response);
                         toast.success(`${name} created successfully!`);
+                        router.refresh()
                     })
                     .catch(function (error) {
                         // handle error
@@ -157,11 +164,12 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, qui
         } catch (error) {
             console.log(await error);
             toast.error("" + error);
+        } finally {
+            setLoading(false)
         }
     }
 
     return (
-
             <Dialog>
                 <DialogTrigger asChild>
                     <div>
@@ -214,13 +222,11 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, qui
 
                         </div>
                         <DialogFooter className="flex-none">
-                            <Button type="submit" disabled={!isValid} className="bg-[#333] hover:bg-[#222]">Save changes</Button>
+                            <Button type="submit" disabled={!isValid || loading} className="bg-[#333] hover:bg-[#222]">Save changes</Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
             </Dialog>
-
-
     )
 }
 

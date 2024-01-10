@@ -22,8 +22,27 @@ export const getAssignments = async (id: number) => {
     return assignments;
 };
 
+
+export const deleteAssignments = async (id: number) => {
+    const deleted = await prismadb.assignment.delete({
+        where: { id: id },
+    });
+
+    return deleted;
+};
+
 export const testingActions = async () => {
     return true;
+}
+
+export const testingDeleter = async (id: number) => {
+    const deleted = await prismadb.assignment.findUnique({
+        where: {
+            id: id
+        }
+    })
+
+    return deleted
 }
 
 export const getMaterials = async (id: number) => {
@@ -36,6 +55,15 @@ export const getMaterials = async (id: number) => {
     return materials;
 };
 
+
+export const deleteMaterials = async (id: number) => {
+    const deleted = await prismadb.lectureMaterial.delete({
+        where: { id: id },
+    });
+
+    return deleted;
+};
+
 export const getTests = async (id: number) => {
     const tests = await prismadb.test.findMany({
         where: {
@@ -44,4 +72,12 @@ export const getTests = async (id: number) => {
     });
 
     return tests;
+};
+
+export const deleteTest = async (id: number) => {
+    const deleted = await prismadb.test.delete({
+        where: { id: id },
+    });
+
+    return deleted;
 };

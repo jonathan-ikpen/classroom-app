@@ -1,11 +1,13 @@
 "use client"
 import "@fillout/react/style.css"
 
-import { FilloutFullScreenEmbed } from "@fillout/react";
+import { FilloutFullScreenEmbed, FilloutPopupEmbed } from "@fillout/react";
 
-function QuizView() {
+function QuizView({ filloutId }: { filloutId: string }) {
     return (
-        <FilloutFullScreenEmbed filloutId="tyRqhhzjJQus" inheritParameters />
+        // <FilloutPopupEmbed filloutId={filloutId} onClose={() => {}} />
+        <FilloutFullScreenEmbed filloutId={filloutId} inheritParameters />
+        // <FilloutFullScreenEmbed filloutId="tyRqhhzjJQus" inheritParameters />
     );
 }
 
