@@ -6,7 +6,25 @@ export async function POST(req: Request) {
     // requesting data from frontend
     const body = await req.json();
 
-    const { user_id, title, quizId, instructions, url, upload, assignment, exam, test, lectureMaterial, } = body;
+    const { user_id, title, quizId, instructions, url, upload, assignment, exam, test, lectureMaterial, role, course_id, enrollCourse } = body;
+
+    if (enrollCourse) {
+      const enrolledCourse = await prismadb.courseEnrollment.create({
+        data: {
+          role,
+          userId: user_id,
+          courseId: course_id
+        },
+        include: {
+          course: true
+        }
+      })
+
+      return NextResponse.json({
+        success: true,
+        data: enrolledCourse
+      })
+    }
 
     if (assignment) {
       const createAssignment = await prismadb.assignment.create({

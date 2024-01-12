@@ -1,14 +1,32 @@
 "use client"
 import React from "react";
+import axios from "@/lib/axios"
+import { useAuth } from "@/utils/contextfile";
+import CoursesThumbnails from "@/app/student/components/course-thumbnails";
 import PrivateRoute from "@/utils/PrivateRoute";
 
-const StudentPage = () => {
+const getCourses = async () => {
+    const fetch = await axios.get('/course')
+    return fetch.data.courses
+}
+
+const getCoursesEnrolled = async (id: number) => {
+    const fetch = await axios.get(`/user/${id}`)
+    return fetch.data.user.courses_enrolled
+}
+
+const StudentPage = async () => {
+    const { isAuthenticated, user } = useAuth()
+    const allCourses = await getCourses()
+    console.log(allCourses)
+    const coursesEnrolled = await getCoursesEnrolled(user.id)
+    console.log(coursesEnrolled)
+
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center items-center">
-      <div className="flex items-end gap-2 mb-7">
-        <h1 className="text-xl">Student Dashboard</h1>
+      <div className="">
+        {/*<h1 className="text-xl">Student Dashboard</h1>*/}
+          <CoursesThumbnails data={allCourses} enrolled={coursesEnrolled}/>
       </div>
-    </div>
   );
 };
 

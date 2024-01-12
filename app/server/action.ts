@@ -22,6 +22,18 @@ export const getAssignments = async (id: number) => {
     return assignments;
 };
 
+export const getCoursesEnrolled = async (id: number) => {
+    const courses = await prismadb.user.findMany({
+        where: {
+            id: id
+        },
+        include: {
+            courses_enrolled: true
+        }
+    })
+    return courses;
+}
+
 
 export const deleteAssignments = async (id: number) => {
     const deleted = await prismadb.assignment.delete({
