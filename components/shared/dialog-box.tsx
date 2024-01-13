@@ -28,6 +28,7 @@ interface CompProps {
     description: string,
     quiz: boolean,
     type: string,
+    course?: any,
 }
 
 type Data = {
@@ -60,7 +61,7 @@ const readFileAsBase64 = (file: File): Promise<string> => {
     });
 };
 
-const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, quiz, type  }) => {
+const DialogBox: React.FC<CompProps> = ({ children, course, icon, name, description, quiz, type  }) => {
     const router = useRouter()
     const { isAuthenticated, user, login, logout } = useAuth();
     const [loading, setLoading] = useState(false)
@@ -91,6 +92,7 @@ const DialogBox: React.FC<CompProps> = ({ children, icon, name, description, qui
             // { user_id, title, quizId, instructions, url, upload, assignment, exam, test, lectureMaterial, }
             const data = {
                 user_id: user.id,
+                course_id: course.id,
                 title: values.title,
                 quizId: values.filloutId,
                 instructions: values.instruction,

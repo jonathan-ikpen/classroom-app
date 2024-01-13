@@ -33,7 +33,7 @@ export async function POST(req: Request) {
           instructions,
           url,
           upload,
-          courseId: user_id
+          courseId: course_id
         }
       })
 
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
           title,
           quizId,
           instructions,
-          courseId: user_id
+          courseId: course_id
         }
       })
 
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
           instructions,
           url,
           upload,
-          courseId: user_id
+          courseId: course_id
         }
       })
 
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
         data: {
           title,
           content: instructions,
-          courseId: user_id
+          courseId: course_id
         }
       })
 

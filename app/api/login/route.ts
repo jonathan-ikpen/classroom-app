@@ -16,6 +16,10 @@ export async function POST(req: Request) {
             where: {
                 email: email,
             },
+            include: {
+                course: true,
+                courses_enrolled: true,
+            },
         });
 
         const isUser = existingUser?.password === password

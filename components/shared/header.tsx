@@ -10,7 +10,8 @@ import {useSearchParams} from "next/navigation";
 const Header = () => {
   const { isAuthenticated, user, login, logout } = useAuth();
   const params = useSearchParams().get('id')
-  const [paramsId, setParamsId] = useState(params ? params : user?.id)
+  const [paramsId, setParamsId] = useState(!params == undefined || null ? params : user?.id)
+  isAuthenticated && console.log(user)
 
   return (
     <header className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 border-b dark:border-zinc-800">
@@ -33,7 +34,7 @@ const Header = () => {
         <span className="text-lg font-semibold">PTI ClassRoom</span>
       </Link>
 
-      {isAuthenticated && (<nav className="hidden md:flex gap-6">
+      {isAuthenticated && user && (<nav className="hidden md:flex gap-6">
         <Link className="font-medium" href={`/${user.role.toLowerCase()}`} prefetch={false}>
           Dashboard
         </Link>

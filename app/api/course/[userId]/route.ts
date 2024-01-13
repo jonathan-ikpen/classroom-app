@@ -50,12 +50,25 @@ export async function PATCH(req: Request, { params }: { params: { userId: string
 
 }
 
-export async function GET(req: Request) {
+export async function GET(req: Request, { params }: { params?: { userId: number } }) {
     try {
-        const users = await prismadb.user.findMany();
-        return NextResponse.json({
-            users,
-        });
+        if(params?.userId) {
+            const course = await prismadb.course.findUnique({
+                where: {
+                    createdBy: Number(params.userId),
+                },
+            })
+            return NextResponse.json({
+                course,
+            })
+        }
+
+        if(!params?.userId) {
+            const courses = await prismadb.course.findMany();
+            return NextResponse.json({
+                courses,
+            });
+        }
     } catch (error) {
         console.log("[Users_Get]", error);
         return new NextResponse("Internal error", { status: 500 });

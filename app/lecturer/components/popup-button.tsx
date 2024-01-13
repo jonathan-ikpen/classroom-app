@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +12,9 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { MdAssignmentAdd } from "react-icons/md";
 import { SiTestcafe } from "react-icons/si";
 import { GoVideo } from "react-icons/go";
+import axios from '@/lib/axios'
+import {useAuth} from "@/utils/contextfile";
+import PrivateRoute from "@/utils/PrivateRoute";
 
 const data = [
   {
@@ -39,7 +43,15 @@ const data = [
   },
 ];
 
-export function PopoverComp() {
+const getCourses = async (id: number) => {
+  const fetch = await axios.get(`/course/${id}`)
+  return fetch.data.course
+}
+
+const PopoverComp = async () => {
+  const {isAuthenticated, user} = useAuth()
+  const course = await getCourses(user.id)
+
   return (
     <Popover>
       <PopoverTrigger asChild className="fixed bottom-4 right-4">
@@ -52,7 +64,7 @@ export function PopoverComp() {
           <div className="grid gap-2">
             {data.map((dat) => (
               <div key={dat.name} className="flex gap-1 p-4">
-                  <DialogBox icon={dat.icon} name={dat.name} type={dat.type} description={dat.description} quiz={dat.quiz} />
+                  <DialogBox course={course} icon={dat.icon} name={dat.name} type={dat.type} description={dat.description} quiz={dat.quiz} />
               </div>
             ))}
           </div>
@@ -61,3 +73,5 @@ export function PopoverComp() {
     </Popover>
   );
 }
+
+export default PrivateRoute(PopoverComp)

@@ -6,11 +6,13 @@ import {getAssignments, getMaterials, getTests, deleteTest, deleteAssignments, d
 
 const View = async ({ params, searchParams }: { params: { slug: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
     // console.log(params)
-    // console.log(searchParams.id)
+    console.log(searchParams.id)
 
     const assignments = await getAssignments(Number(searchParams?.id))
     const materials = await getMaterials(Number(searchParams?.id))
     const tests = await getTests(Number(searchParams?.id))
+
+    // console.log(await getAssignments(1))
 
 
     return  (

@@ -1,6 +1,6 @@
 import React, {Suspense} from "react";
 import "../globals.css";
-import { PopoverComp } from "./components/popup-button";
+import PopoverComp from "./components/popup-button";
 import Loading from "@/app/loading";
 
 export default async function AppLayout({

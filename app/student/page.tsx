@@ -18,9 +18,9 @@ const getCoursesEnrolled = async (id: number) => {
 const StudentPage = async () => {
     const { isAuthenticated, user } = useAuth()
     const allCourses = await getCourses()
-    console.log(allCourses)
     const coursesEnrolled = await getCoursesEnrolled(user.id)
-    console.log(coursesEnrolled)
+    // console.log(allCourses)
+    // console.log(coursesEnrolled)
 
   return (
       <div className="">

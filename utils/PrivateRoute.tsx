@@ -6,7 +6,8 @@ import { useAuth } from '@/utils/contextfile';
 interface PrivateRouteProps {
     params?: { slug: string };
     searchParams?: { [key: string]: string | string[] | undefined };
-    data?: any
+    data?: any,
+    courseId?: number
 }
 
 export default function PrivateRoute<T extends PrivateRouteProps>(WrappedComponent: React.ComponentType<T>) {

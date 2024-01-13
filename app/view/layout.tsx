@@ -1,6 +1,5 @@
 import React, {Suspense} from "react";
 import "../globals.css";
-import { PopoverComp } from "@/app/lecturer/components/popup-button";
 import Loading from "@/app/loading";
 
 export default async function AppLayout({
@@ -13,7 +12,6 @@ export default async function AppLayout({
       <Suspense fallback={<Loading/>}>
           <>
               {children}
-              <PopoverComp/>
           </>
       </Suspense>
   );
