@@ -31,8 +31,8 @@ const TableView = ({ params, data }: { data: any, params: { slug: string } }) =>
     const router = useRouter()
     const [tableData, setTableData] = useState(data);
     const [isQuiz, setIsQuiz] = useState(params.slug.includes('quizes'))
-    console.log(params.slug)
-    console.log(user)
+    // console.log(params.slug)
+    // console.log(user)
 
     const handleDelete = async (id: number) => {
         if (window.confirm('Do you want to delete this?')) {

@@ -10,8 +10,12 @@ import {useSearchParams} from "next/navigation";
 const Header = () => {
   const { isAuthenticated, user, login, logout } = useAuth();
   const params = useSearchParams().get('id')
-  const [paramsId, setParamsId] = useState(!params == undefined || null ? params : user?.id)
-  isAuthenticated && console.log(user)
+  const [paramsId, setParamsId] = useState(!(params == undefined || null) ? params : user?.id)
+
+  // console.log('params: ', params)
+  // console.log('user.id: ', user.id)
+  // console.log('paramsId: ', paramsId)
+  // isAuthenticated && console.log(user)
 
   return (
     <header className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 border-b dark:border-zinc-800">
@@ -48,6 +52,7 @@ const Header = () => {
           Tests
         </Link>
       </nav>)}
+
       {isAuthenticated ? <SignOutButton /> : <LoginButton />}
     </header>
   );
