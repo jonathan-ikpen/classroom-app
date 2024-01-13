@@ -34,11 +34,21 @@ const dataa = [
   },
 ];
 
-const CoursesThumbnails = async ({ data, enrolled }: any) => {
-  const { isAuthenticated, user } = useAuth();
-  // console.log(user)
+const tagCourses = (data: any, enroll: any) => {
+  return data.map((course: any) => ({
+    ...course,
+    enrolled: enroll.some((enroll: any) => enroll.courseId === course.id)
+  }))
+}
 
-  const handleEnroll = async (id: number) => {
+const CoursesThumbnails = ({ data, enrolled }: any) => {
+  const [isEnrolled, setIsEnrolled] = useState(false)
+  const { isAuthenticated, user } = useAuth();
+  const taggedData = tagCourses(data, enrolled)
+
+  const handleEnroll = async (id: number, enrolled: boolean) => {
+    if(enrolled || isEnrolled) return;
+
     try {
       const data = {
         enrollCourse: true,
@@ -52,6 +62,7 @@ const CoursesThumbnails = async ({ data, enrolled }: any) => {
 
       if (fetch.data.success || fetch.statusText == 'OK') {
         toast.success('You have been enrolled')
+        setIsEnrolled(true)
       }
     } catch (err) {
       toast.error('Error enrolling course')
@@ -61,20 +72,20 @@ const CoursesThumbnails = async ({ data, enrolled }: any) => {
 
   return (
     <div className="p-7 grid gap-4 grid-cols-2 lg:grid-cols-3">
-      {data.map((dat: any, i: any) => (
-          <div key={i}>
+      {taggedData.map((dat: any, i: any) => (
+          <Link href={dat.enrolled || isEnrolled ? `/view/?id=${dat.id}` : '#'} key={i} prefetch={false}>
             <Card className=" sm:h-40 flex flex-col justify-between">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-sm font-medium">{dat.title}</CardTitle>
                 {dat.icon}
               </CardHeader>
               <CardContent>
-                <Button className="w-full" variant="outline" onClick={() => handleEnroll(dat.id)}>
-                  {enrolled.some((enroll: any) => enroll.courseId === dat.id) ? 'Open' : 'Enroll'}
+                <Button className="w-full" variant="outline" onClick={() => handleEnroll(dat.id, dat.enrolled)}>
+                  {dat.enrolled || isEnrolled ? 'Open' : 'Enroll'}
                 </Button>
               </CardContent>
             </Card>
-          </div>
+          </Link>
       ))}
     </div>
   );

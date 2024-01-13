@@ -27,6 +27,7 @@ import {AiOutlinePlus} from "react-icons/ai";
 
 
 const TableView = ({ params, data }: { data: any, params: { slug: string } }) => {
+    const {isAuthenticated, user } = useAuth()
     const router = useRouter()
     const [tableData, setTableData] = useState(data);
     const [isQuiz, setIsQuiz] = useState(params.slug.includes('quizes'))
@@ -69,7 +70,7 @@ const TableView = ({ params, data }: { data: any, params: { slug: string } }) =>
                             <TableCell>{timeAgoAndFormattedDate(dat.createdAt.toString()).ago}</TableCell>
                             <TableCell className="text-right flex gap-10 justify-end items-center">
                                 <DialogBox icon={<RxOpenInNewWindow className="cursor-pointer text-blue-600 text-2xl" />} date={timeAgoAndFormattedDate(dat.createdAt.toString()).ago} data={dat} quiz={isQuiz}/>
-                                <MdDelete onClick={() => handleDelete(dat.id)} className="cursor-pointer text-red-400 inline-block text-2xl" />
+                                {user.role == 'LECTURER' && <MdDelete onClick={() => handleDelete(dat.id)} className="cursor-pointer text-red-400 inline-block text-2xl"/>}
                             </TableCell>
                         </TableRow>
                     ))}

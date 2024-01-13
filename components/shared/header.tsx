@@ -5,9 +5,12 @@ import { Button } from "../ui/button";
 import SignOutButton from "./signout-button";
 import { useAuth } from "@/utils/contextfile";
 import LoginButton from "./login-button";
+import {useSearchParams} from "next/navigation";
 
 const Header = () => {
   const { isAuthenticated, user, login, logout } = useAuth();
+  const params = useSearchParams().get('id')
+  const [paramsId, setParamsId] = useState(params ? params : user?.id)
 
   return (
     <header className="fixed top-0 left-0 right-0 flex items-center justify-between px-6 py-4 border-b dark:border-zinc-800">
@@ -34,13 +37,13 @@ const Header = () => {
         <Link className="font-medium" href={`/${user.role.toLowerCase()}`} prefetch={false}>
           Dashboard
         </Link>
-        <Link className="font-medium" href={`/view/assignments?id=${user.id}`} prefetch={false}>
+        <Link className="font-medium" href={`/view/assignments?id=${paramsId}`} prefetch={false}>
           Assignments
         </Link>
-        <Link className="font-medium" href={`/view/materials?id=${user.id}`} prefetch={false}>
+        <Link className="font-medium" href={`/view/materials?id=${paramsId}`} prefetch={false}>
           Materials
         </Link>
-        <Link className="font-medium" href={`/view/quizes?id=${user.id}`}  prefetch={false}>
+        <Link className="font-medium" href={`/view/quizes?id=${paramsId}`}  prefetch={false}>
           Tests
         </Link>
       </nav>)}
