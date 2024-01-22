@@ -11,4 +11,5 @@ const OnboardingPage = () => {
   );
 };
 
-export default PrivateRoute(OnboardingPage);
+// export default PrivateRoute(OnboardingPage);
+export default OnboardingPage;
