@@ -1,9 +1,7 @@
 "use client"
 import React from "react";
-// import ViewButtons from "./components/view-buttons";
 import ViewButtons from "@/app/view/components/view-buttons";
 import PrivateRoute from "@/utils/PrivateRoute";
-import QuizView from "@/components/shared/quiz";
 import axios from "@/lib/axios";
 import { useAuth } from "@/utils/contextfile";
 

@@ -16,6 +16,8 @@ import {MdAssignmentAdd} from "react-icons/md";
 import {SiTestcafe} from "react-icons/si";
 import {GoVideo} from "react-icons/go";
 import Link from "next/link";
+import axios from "@/lib/axios";
+
 
 const data = [
   {
@@ -34,8 +36,8 @@ const data = [
   },
 ];
 
-const ViewButtons = ({ courseId }: { courseId?: number}) => {
-  const { isAuthenticated, user } = useAuth();
+const ViewButtons = ({ courseId }: { courseId: number}) => {
+  // const { isAuthenticated, user } = useAuth();
   const params = useSearchParams().get('id')
 
   return (
@@ -59,4 +61,4 @@ const ViewButtons = ({ courseId }: { courseId?: number}) => {
   );
 };
 
-export default PrivateRoute(ViewButtons);
+export default ViewButtons;
