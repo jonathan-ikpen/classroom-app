@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-import { PopoverComp } from "./components/popup-button";
 // import ViewButtons from "./components/view-buttons";
 import ViewButtons from "@/app/view/components/view-buttons";
 import PrivateRoute from "@/utils/PrivateRoute";
