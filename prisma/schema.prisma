@@ -19,6 +19,7 @@ model User {
   course           Course?            @relation("CreatedCourse")
   matno            String?
   password         String?
+  Answer           Answer[]
 }
 
 model Course {
@@ -79,6 +80,18 @@ model Assignment {
   // Relation Fields
   courseId     Int
   course       Course   @relation(fields: [courseId], references: [id])
+  answers      Answer[] @relation("AssignmentAnswers") // New relation field for answers
+}
+
+model Answer {
+  id           Int        @id @default(autoincrement())
+  content      String
+  createdAt    DateTime   @default(now())
+  // Relation Fields
+  userId       Int
+  user         User       @relation(fields: [userId], references: [id])
+  assignmentId Int
+  assignment   Assignment @relation(name: "AssignmentAnswers", fields: [assignmentId], references: [id])
 }
 
 model LectureMaterial {
