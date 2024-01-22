@@ -10,6 +10,8 @@ interface PrivateRouteProps {
     courseId?: number
 }
 
+
+
 export default function PrivateRoute<T extends PrivateRouteProps>(WrappedComponent: React.ComponentType<T>) {
     const Wrapper: React.FC<T> = (props) => {
         const { isAuthenticated } = useAuth();
@@ -32,3 +34,6 @@ export default function PrivateRoute<T extends PrivateRouteProps>(WrappedCompone
 
     return Wrapper;
 }
+
+
+
